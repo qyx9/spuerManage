@@ -10,14 +10,21 @@ import login from "@/views/Login/login.vue";
 //引入Index模块
 import Index from "@/views/Index/Index.vue";
 //引入系统信息模块
+//账号添加
 import AccountAdd from '@/views/AccountAdd/AccountAdd.vue';
+//账号管理
 import AccountManage from '@/views/AccountManage/AccountManage.vue';
+//密码修改
 import EditPass from '@/views/EditPass/EditPass.vue';
+//管理商品
 import ManageShop from '@/views/ManageShop/ManageShop.vue';
+//添加商品
 import ShopAdd from '@/views/ShopAdd/ShopAdd.vue';
+//
 import Vicious from '@/views/Vicious/Vicious.vue';
 import Usermess from '@/views/Usermess/Usermess.vue';
-
+//销售统计
+import SalesCount from '@/views/SalesCount/SalesCount.vue';
 // 引入添加会员模块
 import AddAccount from '@/views/AddAccount/AddAccount.vue';
 // 引入会员管理模块
@@ -59,6 +66,11 @@ export default new Router({
           name: 'ShopAdd',
           path: '/ShopAdd',
           component: ShopAdd
+        },
+        {
+          name: 'SalesCount',
+          path: '/SalesCount',
+          component: SalesCount
         },
         {
           name: 'Vicious',

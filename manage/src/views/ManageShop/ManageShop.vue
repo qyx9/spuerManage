@@ -46,7 +46,7 @@
 
                             <el-table-column prop="market" label="市场价">
                             </el-table-column>
-                            
+
                             <el-table-column prop="bid" label="进价">
                             </el-table-column>
 
@@ -60,13 +60,13 @@
                             </el-table-column>
 
                             <el-table-column prop="cdate" label="日期">
-                             <template slot-scope="scope">{{ scope.row.cdate | formatCdate }}</template>
+                                <template slot-scope="scope">{{ scope.row.cdate | formatCdate }}</template>
                             </el-table-column>
 
                             <el-table-column label="操作" prop="action">
                                 <template slot-scope="scope">
                                     <!-- 传入id -->
-                                    <el-button size="mini" @click="handleEdit(scope.row.id)" ><i class="el-icon-edit"></i></el-button>
+                                    <el-button size="mini" @click="handleEdit(scope.row.id)"><i class="el-icon-edit"></i></el-button>
                                     <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)"><i class="el-icon-delete" type="danger"></i></el-button>
                                 </template>
                             </el-table-column>
@@ -75,7 +75,9 @@
                     </div>
                 </el-card>
             </el-main>
-            <el-footer>Footer</el-footer>
+            <el-footer>
+                <Footer></Footer>
+            </el-footer>
         </el-container>
     </div>
 </template>
@@ -84,10 +86,13 @@
 import qs from "qs";
 import Header from "@/components/Header/Header.vue";
 //引入moment 时间格式化插件
-import moment from 'moment';
+import moment from "moment";
+// 引入尾部组件
+import Footer from '@/components/Footer/Footer.vue';
 export default {
   components: {
-    Header
+    Header,
+    Footer
   },
   //查询组件相关代码
   data() {
@@ -96,37 +101,38 @@ export default {
         user: "",
         region: ""
       },
-       shopmanage:[]
+      shopmanage: []
     };
   },
- 
+
   methods: {
     onSubmit() {
       console.log("submit!");
     },
     handleEdit(id) {
-          console.log("你确定修改"+id)
-        // console.log(index, row);
-      },
-      handleDelete(id) {
-          // console.log(index, row);
-          this.axios.get(`http://127.0.0.1:3000/users/delshop?id=${id}`)
-          .then(response=>{
-                if(response.data.errCode===1){
-                    //弹出提示框
-                    this.$message({
-                        type:"success",
-                        message:response.data.msg
-                    })
-                    //重新请求数据
-                    this.getshoplists()
-                }else{
-                    this.$message.eror(response.data.msg);
-                }
-          })
-          console.log("你确定要删除"+id)
-      },
-     // 下面两个是选择相关的函数
+      console.log("你确定修改" + id);
+      // console.log(index, row);
+    },
+    handleDelete(id) {
+      // console.log(index, row);
+      this.axios
+        .get(`http://127.0.0.1:3000/users/delshop?id=${id}`)
+        .then(response => {
+          if (response.data.errCode === 1) {
+            //弹出提示框
+            this.$message({
+              type: "success",
+              message: response.data.msg
+            });
+            //重新请求数据
+            this.getshoplists();
+          } else {
+            this.$message.eror(response.data.msg);
+          }
+        });
+      console.log("你确定要删除" + id);
+    },
+    // 下面两个是选择相关的函数
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -139,20 +145,19 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    getshoplists(){
-       this.axios.get('http://127.0.0.1:3000/users/shoplists')
-    .then(response=>{
-     this.shopmanage=response.data;
-    // console.log(response.data);
-    })
+    getshoplists() {
+      this.axios.get("http://127.0.0.1:3000/users/shoplists").then(response => {
+        this.shopmanage = response.data;
+        // console.log(response.data);
+      });
     }
   },
   //vue 生命周期 created（）适合发送请求
-  created(){
-   this.getshoplists();
+  created() {
+    this.getshoplists();
   },
-  filters:{
-    formatCdate(value){
+  filters: {
+    formatCdate(value) {
       return moment(value).format("YYYY-MM-DD");
     }
   }

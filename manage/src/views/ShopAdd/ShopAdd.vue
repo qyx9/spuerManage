@@ -74,16 +74,21 @@
                     </div>
                 </el-card>
             </el-main>
-            <el-footer>Footer</el-footer>
+            <el-footer>
+          <Footer></Footer>
+      </el-footer>
         </el-container>
     </div>
 </template>
 <script>
 import qs from "qs";
 import Header from "@/components/Header/Header.vue";
+// 引入尾部组件
+import Footer from '@/components/Footer/Footer.vue';
 export default {
   components: {
-    Header
+    Header,
+    Footer
   },
   data() {
       // 自定义一个验证密码一致性的函数
