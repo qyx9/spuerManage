@@ -1,5 +1,7 @@
 html,body{
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 #app{
     height: 100%;
@@ -10,4 +12,7 @@ html,body{
 }
 .el-menu-item:hover,.el-menu-item:focus{
     background-color:#2d3a4b;
+}
+.el-main{
+    background-color: #e9eef3;
 }

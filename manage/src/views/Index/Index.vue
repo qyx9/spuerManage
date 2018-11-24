@@ -1,10 +1,17 @@
 <template>
     <div class="Index">
       <el-container>
+        <!-- 左侧导航栏 -->
         <el-aside width="200px">
+          <!-- 头部 -->
           <Nav></Nav>
-           </el-aside>
-        <router-view></router-view>
+        </el-aside>
+        
+        <el-container>
+          <!-- 路由出口 -->
+          <router-view></router-view>
+        </el-container>
+        
      </el-container>
     </div>
 </template>
@@ -20,23 +27,14 @@ export default {
 <style lang="less"> 
 .Index{
      height: 100%;
-     .el-header, .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-  }
   .el-aside {
     background-color: #2d3a4b;
     color: #333;
     text-align: center;
   }
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-  }
   .el-container{
-     height: 100%;
+    height: 100%;
+     
   }
   
  }

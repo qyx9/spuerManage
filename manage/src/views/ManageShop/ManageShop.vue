@@ -13,8 +13,8 @@
 
                             <el-form-item label="选择分类">
                                 <el-select v-model="formInline.region" placeholder="选择分类">
-                                    <el-option label="区域一" value="shanghai"></el-option>
-                                    <el-option label="区域二" value="beijing"></el-option>
+                                    <el-option label="生活用品" value="生活用品"></el-option>
+                                    <el-option label="水果" value="水果"></el-option>
                                 </el-select>
                             </el-form-item>
 
@@ -28,40 +28,40 @@
                         </el-form>
                         <!-- 结尾 -->
                         <!-- 管理商品组件 -->
-                        <el-table ref="multipleTable" :data="shopmanage" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+                        <el-table ref="shopmanage" :data="shopmanage" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
                             <el-table-column type="selection">
                             </el-table-column>
 
-                            <el-table-column prop="username" label="商品条形码">
+                            <el-table-column prop="bar" label="商品条形码">
                             </el-table-column>
 
-                            <el-table-column prop="usergroup" label="商品名称">
+                            <el-table-column prop="name" label="商品名称">
                             </el-table-column>
 
-                            <el-table-column prop="usergroup" label="所属分类">
+                            <el-table-column prop="region" label="所属分类">
                             </el-table-column>
 
-                            <el-table-column prop="usergroup" label="售价">
+                            <el-table-column prop="sale" label="售价">
                             </el-table-column>
 
-                            <el-table-column prop="usergroup" label="市场价">
+                            <el-table-column prop="market" label="市场价">
                             </el-table-column>
                             
-                            <el-table-column prop="usergroup" label="促销价">
+                            <el-table-column prop="bid" label="进价">
                             </el-table-column>
 
-                            <el-table-column prop="usergroup" label="库存">
+                            <el-table-column prop="putin" label="入库数量">
                             </el-table-column>
 
-                            <el-table-column prop="usergroup" label="库存总额">
+                            <el-table-column prop="shopkg" label="商品重量">
                             </el-table-column>
 
-                            <el-table-column prop="usergroup" label="销售总额">
+                            <el-table-column prop="unit" label="商品单位">
                             </el-table-column>
 
                             <el-table-column prop="cdate" label="日期">
                             </el-table-column>
-
+                             <template slot-scope="scope">{{ scope.row.cdate | formatCdate }}</template>
                             <el-table-column label="操作" prop="action">
                                 <template slot-scope="scope">
                                     <!-- 传入id -->
@@ -79,8 +79,11 @@
     </div>
 </template>
 <script>
+//引入qs
 import qs from "qs";
 import Header from "@/components/Header/Header.vue";
+//引入moment 时间格式化插件
+import moment from 'moment';
 export default {
   components: {
     Header
@@ -92,10 +95,7 @@ export default {
         user: "",
         region: ""
       },
-       shopmanage: [{
-            username:1,
-            usergroup:1
-        }]
+       shopmanage:[]
     };
   },
  
@@ -109,20 +109,20 @@ export default {
       },
       handleDelete(id) {
           // console.log(index, row);
-        //   this.axios.get(`http://127.0.0.1:3000/users/deluser?id=${id}`)
-        //   .then(response=>{
-        //         if(response.data.errCode===1){
-        //             //弹出提示框
-        //             this.$message({
-        //                 type:"success",
-        //                 message:response.data.msg
-        //             })
-        //             //重新请求数据
-        //             this.getUserlist()
-        //         }else{
-        //             this.$message.eror(response.data.msg);
-        //         }
-        //   })
+          this.axios.get(`http://127.0.0.1:3000/users/delshop?id=${id}`)
+          .then(response=>{
+                if(response.data.errCode===1){
+                    //弹出提示框
+                    this.$message({
+                        type:"success",
+                        message:response.data.msg
+                    })
+                    //重新请求数据
+                    this.getshoplists()
+                }else{
+                    this.$message.eror(response.data.msg);
+                }
+          })
           console.log("你确定要删除"+id)
       },
      // 下面两个是选择相关的函数
@@ -138,7 +138,23 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-  }
+    getshoplists(){
+       this.axios.get('http://127.0.0.1:3000/users/shoplists')
+    .then(response=>{
+     this.shopmanage=response.data;
+    // console.log(response.data);
+    })
+    }
+  },
+  //vue 生命周期 created（）适合发送请求
+  created(){
+   this.getshoplists();
+  },
+  // filters:{
+  //   formatCdate(value){
+  //     return moment(value).format("YYYY-MM-DD HH:mm:ss");
+  //   }
+  // }
 };
 </script>
 <style lang="less">

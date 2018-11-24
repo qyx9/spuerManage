@@ -8,67 +8,67 @@
                         <span>添加商品</span>
                     </div>
                     <div class="text item">
-                        <el-form ref="form" :model="form" label-width="80px">
-                            <el-form-item label="活动区域">
-                                <el-select v-model="form.region" placeholder="请选择活动区域">
-                                    <el-option label="区域一" value="shanghai"></el-option>
-                                    <el-option label="区域二" value="beijing"></el-option>
+                      <el-form :model="formadd" status-icon :rules="formRules" ref="formadd" label-width="100px" class="demo-ruleForm">
+                            <el-form-item label="选择分类" prop="region">
+                                <el-select v-model="formadd.region" placeholder="请选择分类">
+                                    <el-option label="生活用品" value="生活用品"></el-option>
+                                    <el-option label="水果" value="水果"></el-option>
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="商品条码" prop="bar">
+                                <el-input type="text" v-model="formadd.bar"  autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="商品名称"  prop="name">
+                                <el-input type="text" v-model="formadd.name" autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="商品售价" prop="sale">
+                                <el-input type="text" v-model="formadd.sale" autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="市场价" prop="market">
+                                <el-input type="text" v-model="formadd.market" autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="商品进价" prop="bid">
+                                <el-input type="text" v-model="formadd.bid" autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="入库数量" prop="putin">
+                                <el-input type="text" v-model="formadd.putin" autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="商品重量" prop="shopkg">
+                                <el-input type="text" v-model="formadd.shopkg" autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="活动名称">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item label="商品单位" prop="unit">
+                                <el-input type="text" v-model="formadd.unit" autocomplete="off"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="特殊资源">
-                                <el-radio-group v-model="form.resource">
-                                    <el-radio label="线上品牌商赞助"></el-radio>
-                                    <el-radio label="线下场地免费"></el-radio>
+                            <el-form-item label="会员优惠" prop="menber">
+                                <el-radio-group v-model="formadd.menber">
+                                    <el-radio label="享受会员价" value="享受会员价"></el-radio>
+                                    <el-radio label="不享受会员价" value="不享受会员价"></el-radio>
                                 </el-radio-group>
                             </el-form-item>
 
-                            <el-form-item label="特殊资源">
-                                <el-radio-group v-model="form.resource">
-                                    <el-radio label="线上品牌商赞助"></el-radio>
-                                    <el-radio label="线下场地免费"></el-radio>
+                            <el-form-item label="商品促销" prop="comp">
+                                <el-radio-group v-model="formadd.comp">
+                                    <el-radio label="启用" value="启用"></el-radio>
+                                    <el-radio label="禁用" value="禁用"></el-radio>
                                 </el-radio-group>
                             </el-form-item>
 
-                            <el-form-item label="活动形式">
-                                <el-input type="textarea" v-model="form.desc"></el-input>
+                            <el-form-item label="商品简介" prop="descs">
+                                <el-input type="textarea" v-model="formadd.descs"></el-input>
                             </el-form-item>
 
                             <el-form-item>
-                                <el-button type="primary" @click="onSubmit">添加</el-button>
-                                <el-button>取消</el-button>
+                                <el-button type="primary" @click="submitForm('formadd')">添加</el-button>
+                                <el-button @click="resetForm('formadd')">重置</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -86,22 +86,135 @@ export default {
     Header
   },
   data() {
+      // 自定义一个验证密码一致性的函数
+    const confirmPwd = (rule, value, callback) => {
+        // 非空验证
+        if (value === '') {
+            // 输出不能为空的提示
+            callback(new Error('请再次输入密码'));
+        } else if (value !== this.adduser.password) { // 一致性验证
+            // 输出密码不一致的回调
+            callback(new Error('两次密码不一致'))
+        } else {
+            // 成功提示（绿色勾勾）
+            callback()
+        }
+    }
     return {
-      form: {
+      formadd: {
         name: "",
         region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
+        bar: "",
+        sale: "",
+        market: "",
+        bid: "",
+        putin: "",
+        shopkg: "",
+        unit: "",
         type: [],
-        resource: "",
-        desc: ""
+        menber: "",
+        comp: "",
+        descs: ""
+      },
+       formRules: {
+        // 验证用户名
+       region: [
+            { required: true, message: '选择不能为空', trigger: 'change' }// 非空验证
+        ],
+       comp: [
+            { required: true, message: '选择不能为空', trigger: 'change' }// 非空验证
+        ],
+       menber: [
+            { required: true, message: '选择不能为空', trigger: 'change' }// 非空验证
+        ],
+        // 验证确认密码 --- 自定义验证规则
+        // validtor 配置选项的值 是一个函数 可以自己在这个函数里面验证
+        name: [
+            { required: true, message: '名称不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        bar: [
+            { required: true, message: '商品条码不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        sale: [
+            { required: true, message: '商品售价不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        market: [
+            { required: true, message: '市场价不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        bid: [
+            { required: true, message: '进价不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        putin: [
+            { required: true, message: '数量不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        shopkg: [
+            { required: true, message: '重量不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        unit: [
+            { required: true, message: '单位不能为空', trigger: 'blur' }, // 非空验证
+        ],
+        descs: [
+            { required: true, message: '描述不能为空', trigger: 'blur' }, // 非空验证
+        ]
       }
     };
   },
   methods: {
-    onSubmit() {
-      console.log("submit!");
+  // 表单提交触发的函数
+    submitForm(formName) {
+      //  获取整个登录表单  调用validate(valid => {  }) 方法验证
+      this.$refs[formName].validate(valid => {
+        // 如果所有的表单前端验证都合法 那么 valid就是true 那么就可以提交给后端
+        // 否则 只要有一个表单验证不合法 valid就是false 那么不能提交
+        if (valid) {
+
+        //   alert("前端验证通过，可以发送给后端!");
+          // 收集账号和密码（获取用户输入的账号和密码 发送给前端）
+          let parms={
+             name:this.formadd.name,
+             region:this.formadd. region,
+             bar:this.formadd.bar,
+             bid:this.formadd.bid,
+             sale:this.formadd.sale,
+             market:this.formadd.market,
+             putin:this.formadd.putin,
+             shopkg:this.formadd.shopkg,
+             unit:this.formadd.unit,
+             menber:this.formadd.menber,
+             comp:this.formadd.comp,
+             descs:this.formadd.descs
+          }
+        //   let username = this.formadd.username;
+        //   let password = this.formadd.password;
+        //   let usergroup = this.formadd.usergroup;
+         
+          console.log(parms);
+          this.axios.post('http://127.0.0.1:3000/users/shoplist',qs.stringify(parms),{'header':{'Content-Type':'application/x-www-form-urlencoded' }})
+          .then(response=>{
+            // console.log(response.data);
+            if(response.data.errCode===1){
+                this.$message({
+                    type:"success",
+                    message:response.data.msg
+                })
+                this.$router.push('/ManageShop');
+            }else{
+                this.$message.error(response.data.msg);
+            }
+
+          })
+          // 通过路由跳转 跳转到后端系统首页
+        //   console.log(this.$router) // vue实例可以直接获取路由对象
+        //   this.$router.push('/');
+          
+        } else {
+          console.log("前端验证不通过, 不能发送");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     }
   }
 };

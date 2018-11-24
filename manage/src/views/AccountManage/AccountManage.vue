@@ -52,15 +52,20 @@
               </el-card>
           </el-tabs>
         </el-main>
-      <el-footer>Footer</el-footer>
+      <el-footer>
+          <Footer></Footer>
+      </el-footer>
         </el-container>
     </div>
 </template>
 <script>
 import Header from '@/components/Header/Header.vue';
+// 引入尾部组件
+import Footer from '@/components/Footer/Footer.vue';
 export default {
     components:{
      Header,
+     Footer
     },
       data() {
       return {
@@ -69,6 +74,11 @@ export default {
     },
      methods: {
       handleEdit(id) {
+          this.axios.get(`http://127.0.0.1:3000/users/edituser?id=${id}`)
+          .then(response=>{
+              console.log(response.data);
+          })
+         this.$router.push(`/EditPass`);
           console.log("你确定修改"+id)
         // console.log(index, row);
       },

@@ -35,18 +35,22 @@ export default {
 </script>
 <style lang="less">
 .Nav{
+    text-align: center;
      background-color: #2d3a4b;
     .el-submenu__title{
          background-color: #2d3a4b;
          color: #fff;
+         font-size: 17px;
       }
 
     .el-menu-item{
         background-color: #2d3a4b;
         color: #fff;
+        font-size: 15px;
     }
     .el-menu {
         border:none;
+        
     }
  
 }

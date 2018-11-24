@@ -31,15 +31,29 @@
             </div>
         </el-card>
         </el-main>
-      <el-footer>Footer</el-footer>
+      <el-footer>
+          <!-- 尾部 -->
+          <Footer></Footer>
+      </el-footer>
         </el-container>
     </div>
 </template>
 <script>
+//获取id
+// var Id=location.href.toString().split("=",2)[1];
+//引入Header
 import Header from '@/components/Header/Header.vue';
+//引入Manage
+import Manage from '@/components/Manage/Manage.vue';
+// 引入尾部组件
+import Footer from '@/components/Footer/Footer.vue';
 export default {
+    //注册组件
         components:{
-        Header
+        Header,
+        Manage,
+        Footer
+
     },
     data() {
     // 自定义一个验证密码一致性的函数
@@ -62,8 +76,7 @@ export default {
       editpass: {
         username: "",
         password: "",
-        checkPwd: "",
-        usergroup:""
+        checkPwd: ""
       },
       // 验证的字段   
       loginRules: {
@@ -98,7 +111,7 @@ export default {
         // 否则 只要有一个表单验证不合法 valid就是false 那么不能提交
         if (valid) {
 
-          alert("前端验证通过，可以发送给后端!");
+        //   alert("前端验证通过，可以发送给后端!");
           // 前端验证通过 发送ajax 把账号 和 密码 发送给后端 验证 用户名和密码是否存在
           // 收集账号和密码（获取用户输入的账号和密码 发送给前端）
           let username = this.editpass.username;
@@ -118,8 +131,23 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
-  }
+    },
+    //请求数据方法
+    // getUser(){
+    // //    var Id=this.Id;
+    // //    console.log(Id);
+    //   this.axios.get(`http://127.0.0.1:3000/users/editpass?id=${Id}`)
+    //   .then(response=>{
+    //       console.log(response.data);
+    //   })
+    // }
+       
+  },
+  //Vue 生命周期 适合发送请求
+//    created(){
+//        //调用请求
+//        this.getUser()
+//    }
 }
 </script>
 <style lang="less">
