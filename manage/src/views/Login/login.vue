@@ -94,7 +94,8 @@ export default {
 <style lang="less">
 .login {
   height: 100%;
-  background: url("./55ee948a21eea.jpg") center;
+  background: url("./timg.jpg")  no-repeat;
+  background-size:cover;
   .login-form {
     width: 500px;
     height: 350px;
@@ -115,7 +116,7 @@ export default {
         color: white;
     }
     .el-input{
-        width: 350px;
+        width: 370px;
     }
   }
 }
