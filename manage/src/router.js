@@ -18,6 +18,11 @@ import ShopAdd from '@/views/ShopAdd/ShopAdd.vue';
 import Vicious from '@/views/Vicious/Vicious.vue';
 import Usermess from '@/views/Usermess/Usermess.vue';
 
+// 引入添加会员模块
+import AddAccount from '@/views/AddAccount/AddAccount.vue';
+// 引入会员管理模块
+import AccountManagement from '@/views/AccountManagement/AccountManagement.vue';
+
 export default new Router({
   routes: [
     {
@@ -64,6 +69,17 @@ export default new Router({
           name: 'Usermess',
           path: '',
           component: Usermess
+        },
+        {// 添加会员模块
+          name: 'AddAccount',
+          path: '/AddAccount',
+          component: AddAccount
+        },
+        {
+          //添加会员管理模块
+          name:"AccountManagement",
+          path:"/AccountManagement",
+          component:AccountManagement
         }
       ]
       }
