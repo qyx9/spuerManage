@@ -32,6 +32,7 @@
                         <el-table-column
                             prop="cdate"
                             label="日期">
+                         <template slot-scope="scope">{{ scope.row.cdate | formatCdate }}</template>
                         </el-table-column>
 
                         <el-table-column label="操作"  prop="action">
@@ -62,6 +63,8 @@
 import Header from '@/components/Header/Header.vue';
 // 引入尾部组件
 import Footer from '@/components/Footer/Footer.vue';
+//引入moment 时间格式化插件
+import moment from 'moment';
 export default {
     components:{
      Header,
@@ -125,7 +128,12 @@ export default {
      //vue 的生命周期 适合用于发送请求
      created(){
          this.getUserlist();
-     }
+     },
+      filters:{
+    formatCdate(value){
+      return moment(value).format("YYYY-MM-DD HH:mm:ss");
+    }
+  }
 }
 </script>
 <style lang="less">

@@ -60,8 +60,9 @@
                             </el-table-column>
 
                             <el-table-column prop="cdate" label="日期">
-                            </el-table-column>
                              <template slot-scope="scope">{{ scope.row.cdate | formatCdate }}</template>
+                            </el-table-column>
+
                             <el-table-column label="操作" prop="action">
                                 <template slot-scope="scope">
                                     <!-- 传入id -->
@@ -150,11 +151,11 @@ export default {
   created(){
    this.getshoplists();
   },
-  // filters:{
-  //   formatCdate(value){
-  //     return moment(value).format("YYYY-MM-DD HH:mm:ss");
-  //   }
-  // }
+  filters:{
+    formatCdate(value){
+      return moment(value).format("YYYY-MM-DD");
+    }
+  }
 };
 </script>
 <style lang="less">
