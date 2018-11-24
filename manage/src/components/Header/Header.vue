@@ -40,7 +40,7 @@ export default {};
     .el-dropdown{
         float: right;
         font-size: 20px;
-        margin-right: 50px;
+        margin-right: 10px;
         .el-dropdown-link{
             display: inline-block;
             // width: 100px;
@@ -54,7 +54,7 @@ export default {};
     width: 50px;
     height: 50px;
     display: inline-block;
-    margin-left:15px; 
+    margin-left:10px; 
     img {
       width: 50px;
       height: 50px;
