@@ -29,7 +29,8 @@ import SalesCount from '@/views/SalesCount/SalesCount.vue';
 import AddAccount from '@/views/AddAccount/AddAccount.vue';
 // 引入会员管理模块
 import AccountManagement from '@/views/AccountManagement/AccountManagement.vue';
-
+//引入商品修改页
+import Shopedit from '@/views/Shopedit/Shopedit.vue';
 export default new Router({
   routes: [
     {
@@ -76,6 +77,12 @@ export default new Router({
           name: 'Vicious',
           path: '/Vicious',
           component: Vicious
+        },
+        //商品修改页路由
+        {
+          name: 'Shopedit',
+          path: '/Shopedit',
+          component: Shopedit
         },
         {
           name: 'Usermess',

@@ -10,8 +10,8 @@
                     <el-input type="text" v-model="userlogin.username" autocomplete="off"></el-input>
                 </el-form-item>
                
-                <el-form-item label="密码" prop="userpass">
-                    <el-input type="password" v-model="userlogin.userpass" autocomplete="off"></el-input>
+                <el-form-item label="密码" prop="password">
+                    <el-input type="password" v-model="userlogin.password" autocomplete="off"></el-input>
                 </el-form-item>
                 
                 <el-form-item label="确认密码" prop="checkPass">
@@ -28,13 +28,15 @@
 </template>
 
 <script>
+//引入 qs
+import qs from 'qs';
 export default {
     data() {
         // 自定义一个验证密码一致性的函数
          let confirmPwd = (rule,value,callback)=>{
              if(value === ''){
                  callback(new Error('请在次输入密码'));
-             }else if(value !== this.userlogin.userpass){
+             }else if(value !== this.userlogin.password){
                  callback(new Error('两次密码不一致'));
              }else{
                 callback();
@@ -46,7 +48,7 @@ export default {
         //   登录表单数据对象
         userlogin: {
           username: '',
-          userpass: '',
+         password: '',
           checkPass: ''
         },
         //验证字段
@@ -57,7 +59,7 @@ export default {
             { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
         ],
         // 验证密码
-        userpass:[
+       password:[
             { required: true, message: '密码不能为空', trigger: 'blur' },
             { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
         ],
@@ -72,12 +74,34 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            // alert('submit!');
             // 拿到帐号密码
-            let username = this.userlogin.username;
-            let userpass = this.userlogin.userpass;
+            //如果前端验证通过发请求给后端
+            let parms={
+                username:this.userlogin.username,
+                password:this.userlogin.password
+            }
+             // 允许携带cookie
+          this.axios.defaults.withCredentials=true;
+            this.axios.post('http://127.0.0.1:3000/users/userLogin',qs.stringify(parms),{'header':{'Content-Type':'application/x-www/form-urlencoded'}})
+            .then(response=>{
+                // console.log(response.data);
+                
+                if(response.data.errCode===1){
+                    this.$message({
+                        type:"success",
+                        message:response.data.msg
+                    })
+                    setTimeout(()=>{
+                        this.$router.push('/');
+                    },1000);
+                }else{
+                    this.$message.error(response.data.msg);
+                }
+            })
+            // let username = this.userlogin.username;
+            // letpassword = this.userlogin.userpass;
             // 通过路由跳转跳到后端系统首页
-            this.$router.push('/');
           } else {
             console.log('error submit!!');
             return false;

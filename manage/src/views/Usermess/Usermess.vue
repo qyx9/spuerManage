@@ -71,7 +71,7 @@
             </div>
         </el-card>
         </el-main>
-      <el-footer>Footer</el-footer>
+      <el-footer><Footer></Footer></el-footer>
         </el-container>
     </div>
 </template>
@@ -144,5 +144,9 @@ export default {
      .el-alert--success{
          margin-bottom: 20px;
      }
+     .el-alert--info {
+          margin-bottom: 20px;
+     }
+
  }
 </style>

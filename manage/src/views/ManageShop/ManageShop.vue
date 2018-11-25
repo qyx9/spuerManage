@@ -110,6 +110,13 @@ export default {
       console.log("submit!");
     },
     handleEdit(id) {
+       this.$router.push({
+                path:'/Shopedit',
+                name:'Shopedit',
+                params:{
+                 id : id
+                }
+              })
       console.log("你确定修改" + id);
       // console.log(index, row);
     },
