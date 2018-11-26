@@ -45,12 +45,14 @@ export default {
          }
      
       return {
+           id:'',
         //   登录表单数据对象
         userlogin: {
           username: '',
          password: '',
-          checkPass: ''
+          checkPass: '',
         },
+        
         //验证字段
         rules2: {
         //   验证用户名
@@ -110,7 +112,24 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      getbank(){
+          this.axios.get(`http://127.0.0.1:3000/users/userbank`)
+          .then(response=>{
+              if(response.data.errCode===0){
+                  
+              }else{
+              this.userlogin.username=response.data[0].username;
+              this.userlogin.password=response.data[0].password;
+              this.userlogin.checkPass=response.data[0].password;
+              }
+              
+          })
       }
+    },
+    //vue的生命周期 适合用于发送请求
+    created(){
+     this.getbank();
     }
 };
 </script>

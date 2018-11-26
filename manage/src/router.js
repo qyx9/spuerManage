@@ -31,6 +31,8 @@ import AddAccount from '@/views/AddAccount/AddAccount.vue';
 import AccountManagement from '@/views/AccountManagement/AccountManagement.vue';
 //引入商品修改页
 import Shopedit from '@/views/Shopedit/Shopedit.vue';
+//引入 个人中心
+import Personal from '@/views/Personal/Personal.vue';
 export default new Router({
   routes: [
     {
@@ -83,6 +85,12 @@ export default new Router({
           name: 'Shopedit',
           path: '/Shopedit',
           component: Shopedit
+        },
+        //个人中心路由
+        {
+          name: 'Personal',
+          path: '/Personal',
+          component: Personal
         },
         {
           name: 'Usermess',

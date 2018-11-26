@@ -163,7 +163,7 @@ router.post('/delselect',(req,res)=>{
         res.send({"errCode":1,"msg":"批量删除成功!"})
       }else{
         
-        res.send({"errCode":1,"msg":"批量删除失败!"})
+        res.send({"errCode":0,"msg":"批量删除失败!"})
       }
       // console.log('1');
     }
@@ -241,6 +241,7 @@ router.post('/shoplist',(req,res)=>{
   })
   // res.send("11111");
 })
+
 //接收前端发来的shoplists请求
 router.get('/shoplists',(req,res)=>{
  
@@ -259,7 +260,7 @@ router.get('/shoplists',(req,res)=>{
   // res.send('1111122')
 })
 
-//删除商品
+//单个删除商品
 router.get('/delshop',(req,res)=>{
  
   //接收前端发来的id
@@ -320,5 +321,203 @@ router.post('/editshop',(req,res)=>{
        }
      }
    })
+})
+
+//退出登录
+router.get('/logout',(req,res)=>{
+  // res.send('1');
+  // 清除cookie
+  res.clearCookie('userid');
+  res.clearCookie('username');
+  res.send({"errCode":1,"msg":"退出登录成功！"});
+})
+
+//接收前端用户名名字请求
+router.get('/username',(req,res)=>{
+  // res.send('888')
+  //获取浏览器的cookie的id
+  let id= req.cookies.userid;
+  //写sql语句
+  const sqlstr=`select * from usermess where id=${id}`;
+  //执行sql语句
+  connection.query(sqlstr,(err,data)=>{
+    if(err){
+      throw err;
+    }
+    else{
+      let username=data[0].username;
+      res.send(username);
+      // console.log(username);
+    }
+  })
+  // console.log(sqlstr);
+})
+
+//接收前端发来的密码验证请求
+router.get('/confirmold',(req,res)=>{
+  //获取当前用户名id
+  let id = req.cookies.userid;
+  //接收前端发来的密码
+  let {password}=req.query;
+  //写sql语句
+  const sqlstr=`select * from usermess where id=${id}`;
+  //执行sql
+  connection.query(sqlstr,(err,data)=>{
+    if(err){
+      throw err;
+    }
+    else{
+      if(password === data[0].password){
+        res.send({"errCode":1,"msg":"旧密码正确！"})
+      }else{
+        res.send({"errCode":0,"msg":"旧密码不正确！"})
+
+      }
+    //  console.log(data);
+    }
+  })
+  // res.send('9999');
+})
+
+//接收前端发来的密码修改请求
+router.get('/editpassfrom',(req,res)=>{
+  //获取浏览器的cookie id
+  let id=req.cookies.userid;
+  //接收前端发来的新密码
+  let {password}=req.query;
+  //写sql语句
+  const sqlstr=`update usermess set password=${password} where id=${id}`;
+  connection.query(sqlstr,(err,data)=>{
+    if(err){
+      throw err;
+    }else{
+      if(data.affectedRows>0){
+        res.send({"errCode":1,"msg":"密码修改成功！"})
+      }else{
+        res.send({"errCode":1,"msg":"密码修改失败！"})
+      }
+      // console.log(data)
+    }
+  })
+  // res.send("555")
+})
+
+//接收前端发来的分页请求
+router.get('/userlistpage',(req,res)=>{
+  //接收前端发来的数据
+  let {currentPage,Pagesize}=req.query;
+  currentPage=currentPage?currentPage:1;
+  Pagesize=Pagesize?Pagesize:3;
+  //写sql语句
+  let sqlstr=`select * from usermess order by cdate desc`
+  //执行sql
+  connection.query(sqlstr,(err,data)=>{
+    if(err){
+      throw err;
+    }else{
+    let tatalcount=data.length;
+    let n= (currentPage-1)*Pagesize;
+
+    sqlstr+=` limit ${n},${Pagesize} `
+    // console.log(sqlstr);
+    //执行sql语句
+    connection.query(sqlstr,(err,data)=>{
+      if(err){
+        throw err;
+      }else{
+        res.send({"tatalcount":tatalcount,"data":data});
+      }
+    })
+    //  console.log(data);
+    }
+  })
+  // res.send('92')
+})
+
+//接收前端发来的批量删除的请求
+router.post('/delselectshop',(req,res)=>{
+ 
+  //接收前端发来的数据
+  let {idArr}=req.body;
+  //把idArr 转为数组
+  idArr=JSON.parse(idArr);
+  //写sql语句
+  const sqlstr=`delete from shopmess where id in (${idArr})`;
+  //执行sql语句
+  connection.query(sqlstr,(err,data)=>{
+    if(err){
+      throw err ;
+    }else{
+      if(data.affectedRows>0){
+        res.send({"errCode":1,"msg":"批量删除成功!"})
+      }else{
+        
+        res.send({"errCode":0,"msg":"批量删除失败!"})
+      }
+      // console.log('1');
+    }
+  })
+  // console.log(sqlstr);
+  // res.send('1')
+})
+
+//接收前端发来的shop分页请求
+router.get('/shoplistpage',(req,res)=>{
+  // res.send('789')
+  //接收前端发来的数据
+  let {currentPage,Pagesize}=req.query;
+  //写sql语句
+  let sqlstr=`select * from shopmess order by cdate desc`;
+  //执行sql语句
+  connection.query(sqlstr,(err,data)=>{
+    if(err){
+      throw err;
+    }else{
+      let totalcount=data.length;
+      let n=(currentPage-1)*Pagesize;
+      //写sql语句
+      sqlstr+=` limit ${n},${Pagesize}`
+      //执行sql语句 
+      connection.query(sqlstr,(err,data)=>{
+        if(err){
+          throw err;
+        }else{
+          res.send({"totalcount":totalcount,"data":data});
+        }
+      })
+
+      // console.log(data);
+    }
+  })
+})
+
+//接收前端发来的切换账号的请求
+router.get('/change',(req,res)=>{
+  // res.send('1');
+  //获取浏览器的cookie的id
+  let id = req.cookies.userid;
+  res.send(id);
+})
+
+//切换账号回显数据
+router.get('/userbank',(req,res)=>{
+   //获取浏览器的id
+   let id = req.cookies.userid;
+   if(!id){
+     res.send({"errCode":0,"msg":""});
+   }else{
+     //写sql语句
+     const sqlstr=`select * from usermess where id=${id}`;
+     //执行sql语句 
+     connection.query(sqlstr,(err,data)=>{
+       if(err){
+         throw err;
+       }else{
+            res.send(data)
+            // res.clearCookie('userid');
+            // res.clearCookie('username');
+       }
+     })
+   }
 })
 module.exports = router;

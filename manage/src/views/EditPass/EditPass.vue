@@ -5,16 +5,16 @@
         <el-main>
             <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span>添加账号</span>
+                <span>修改密码</span>
             </div>
             <div class="text item">
                 <el-form :model="editpass" status-icon :rules="loginRules" ref="editpass" label-width="100px" class="demo-ruleForm">
 
-                <el-form-item label="账号" prop="username">
-                    <el-input type="text" v-model="editpass.username" autocomplete="off"></el-input>
+                <el-form-item label="旧密码" prop="oldPwd">
+                    <el-input type="text" v-model="editpass.oldPwd" autocomplete="off"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密码" prop="password">
+                <el-form-item label="新密码" prop="password">
                     <el-input type="text" v-model="editpass.password" autocomplete="off"></el-input>
                 </el-form-item>
 
@@ -56,6 +56,18 @@ export default {
 
     },
     data() {
+        //定义一个旧密码验证函数
+        const confirmold=(rule, value, callback)=>{
+            this.axios.get(`http://127.0.0.1:3000/users/confirmold?password=${value}`)
+            .then(response=>{
+                // console.log(response.data);
+                if(response.data.errCode===1){
+                    callback()
+                }else{
+                    callback(new Error(response.data.msg));
+                }
+            })
+        }
     // 自定义一个验证密码一致性的函数
     const confirmPwd = (rule, value, callback) => {
         // 非空验证
@@ -74,16 +86,15 @@ export default {
     return {
       // 登录表单数据对象
       editpass: {
-        username: "",
+        oldPwd: "",
         password: "",
         checkPwd: ""
       },
       // 验证的字段   
       loginRules: {
         // 验证用户名
-        username: [
-            { required: true, message: '账号不能为空', trigger: 'blur' }, // 非空验证
-            { min: 3, max: 6, message: '长度必须 3 到 6 个字符', trigger: 'blur' } // 长度验证
+        oldPwd: [
+            { required: true, validator: confirmold, trigger: 'blur' }, // 非空验证
         ],
         // 验证密码
         password: [
@@ -114,10 +125,24 @@ export default {
         //   alert("前端验证通过，可以发送给后端!");
           // 前端验证通过 发送ajax 把账号 和 密码 发送给后端 验证 用户名和密码是否存在
           // 收集账号和密码（获取用户输入的账号和密码 发送给前端）
-          let username = this.editpass.username;
+        //   let oldPwd = this.editpass.oldPwd;
           let password = this.editpass.password;
-
-          console.log(username, password);
+        this.axios.get(`http://127.0.0.1:3000/users/editpassfrom?password=${password}`)
+        .then(response=>{
+            if(response.data.errCode===1){
+                this.$message({
+                    type:"success",
+                    message:response.data.msg
+                })
+                setTimeout(()=>{
+                    this.$router.push('/AccountManage');
+                },500)
+            }else{
+                this.$message.error(response.data.msg);
+            }
+            // console.log(response.data);
+        })
+        //   console.log(oldPwd, password);
 
           // 通过路由跳转 跳转到后端系统首页
         //   console.log(this.$router) // vue实例可以直接获取路由对象

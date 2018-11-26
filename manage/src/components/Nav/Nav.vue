@@ -17,7 +17,6 @@
                   <template slot="title"><i class="el-icon-menu"></i>商品管理</template>
                     <el-menu-item index="/ShopAdd">添加商品</el-menu-item>
                     <el-menu-item index="/ManageShop">管理商品</el-menu-item>
-                    <el-menu-item index="/Shopedit">修改商品</el-menu-item>
                 </el-submenu>
 
                 <el-submenu index="3">

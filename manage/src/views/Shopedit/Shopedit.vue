@@ -5,7 +5,7 @@
             <el-main>
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>添加商品</span>
+                        <span>修改商品</span>
                     </div>
                     <div class="text item">
                       <el-form :model="formadd" status-icon :rules="formRules" ref="formadd" label-width="100px" class="demo-ruleForm">
@@ -229,6 +229,10 @@ export default {
       },
       getshopedit(){
           let id =this.id;
+          if(id===null){
+              this.$message.error("请选择之后再操作");
+              retrun
+          }
         this.axios.get(`http://127.0.0.1:3000/users/shopedit?id=${id}`)
          .then(response=>{
             //  console.log(response.data);

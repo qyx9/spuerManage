@@ -30,17 +30,21 @@
                   </template>
                 </el-table-column>
               </el-table>
+                <!-- 分页组件 -->
+          <div class="block">
+            <el-pagination @size-change="handleSizeChange"
+             @current-change="handleCurrentChange"
+              :current-page="currentPage" 
+             :page-sizes="[1, 3, 5, 7]"
+              :page-size=" Pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
+          </div>
               <div style="margin-top: 20px">
                 <el-button @click="delselect" type="danger">批量删除</el-button>
                 <el-button @click="toggleSelection()">取消选择</el-button>
               </div>
             </div>
           </el-card>
-          <!-- 分页组件 -->
-          <div class="block">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-            </el-pagination>
-          </div>
         </el-tabs>
         <!-- <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button> -->
 
@@ -113,10 +117,9 @@ export default {
       amanage: [],
       editid:'',//用于保存id
       selectArr:[],//用于保存选择
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
+      currentPage: 1,
+      Pagesize:3,
+      total:8,
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
@@ -183,7 +186,7 @@ export default {
               message: response.data.msg
             });
             //重新请求数据
-            this.getUserlist();
+            this.getUserlistpage();
           } else {
             this.$message.eror(response.data.msg);
           }
@@ -230,18 +233,39 @@ export default {
          })
          //删除成功
         //  刷新页面
-        this.getUserlist();
+        this.getUserlistpage();
        }else{
          this.$message.error(response.data.msg);
        }
       //  console.log(response.data);
      })
     },
-    //发送请求
-    getUserlist() {
-      this.axios.get("http://127.0.0.1:3000/users/userlist").then(response => {
+    // //发送请求
+    // getUserlist() {
+    //   this.axios.get("http://127.0.0.1:3000/users/userlist").then(response => {
+    //     //把接收的数据给前端
+    //     this.amanage = response.data;
+    //     //  console.log(response.data);
+    //   });
+    // },
+    //分页请求
+    getUserlistpage() {
+      //获取当前页码
+      let currentPage=this.currentPage;
+      //获取当前多少条
+      let Pagesize=this.Pagesize;
+      this.axios.get(`http://127.0.0.1:3000/users/userlistpage?currentPage=${currentPage}&Pagesize=${Pagesize}`)
+      .then(response => {
+        
         //把接收的数据给前端
-        this.amanage = response.data;
+        this.amanage=response.data.data;
+        this.total=response.data.tatalcount;
+        //判断
+        if(!response.data.data.length && currentPage!==1){
+          this.currentPage-=1;
+          this.getUserlistpage()
+        }
+        // this.amanage = response.data;
         //  console.log(response.data);
       });
     },
@@ -259,9 +283,6 @@ export default {
             usergroup:this.editform.usergroup,
             id:this.editid
           }
-        //   let username = this.formadd.username;
-        //   let password = this.formadd.password;
-        //   let usergroup = this.formadd.usergroup;
            //如果表单验证通过发送请求
            this.axios.post('http://127.0.0.1:3000/users/userEdit',
            qs.stringify(parms),{'header':{'Content-Type':'application/x-www/form-urlencoded'}})
@@ -274,7 +295,7 @@ export default {
                //隐藏回显框
                 this.dialogFormVisible = false;
                 //刷新页面
-               this.getUserlist();
+               this.getUserlistpage();
              }else{
                this.$msessage.error(reponse.data.msg);
              }
@@ -294,26 +315,23 @@ export default {
       this.$refs[formName].resetFields();
     },
 
-
-    //选择函数
-    // setCurrent(row) {
-    //   this.$refs.multipleTable.setCurrentRow(row);
-    // },
-    // handleCurrentChange(val) {
-    //   this.currentRow = val;
-    //   console.log(val);
-    // },
     //分页函数
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      //获取当前多少条
+      this.Pagesize=val;
+       this.getUserlistpage();
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+       //获取当前页码
+      this.currentPage=val;
+       this.getUserlistpage();
+      // console.log(`当前页: ${val}`);
     }
   },
   //vue 的生命周期 适合用于发送请求
   created() {
-    this.getUserlist();
+    this.getUserlistpage();
   },
   filters: {
     formatCdate(value) {

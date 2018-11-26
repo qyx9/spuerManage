@@ -38,7 +38,7 @@ router.beforeEach((to,from,next)=>{
     // console.log(response.data);
   })
   //放行
-  next();
+  // next();
 })
 //引入base样式
 import "@/common/css/base.css";
